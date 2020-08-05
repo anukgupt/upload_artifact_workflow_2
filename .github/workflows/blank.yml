@@ -8,13 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - shell: bash
+        run: mkdir -p homework
+      - shell: bash
         run: |
-          echo Hello World! > hello-world.txt
+          echo Hello World! > homework/hello-world.txt |
+          echo Hello World! > homework/hello-world2.txt
       - name: Upload hello world file
         uses: actions/upload-artifact@v1
         with:
           name: hello-world
-          path: hello-world.txt
+          path: homework
 
   download-data-job:
     name: Download data from artifact
@@ -25,12 +28,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: hello-world
-      - shell: bash
-        run: |
-          value=`cat hello-world/hello-world.txt`
-          echo $value > hello-world/hello-world.txt
-      - name: Upload hello world to artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: hello-world
-          path: hello-world/hello-world.txt
+          path: homework
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: homework
